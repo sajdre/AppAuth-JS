@@ -4,6 +4,7 @@
  */
 export declare abstract class Requestor {
     abstract xhr<T>(settings: JQueryAjaxSettings): Promise<T>;
+    fetch: any;
 }
 /**
  * Uses $.ajax to makes the Ajax requests.
@@ -15,6 +16,7 @@ export declare class JQueryRequestor extends Requestor {
  * Uses fetch API to make Ajax requests
  */
 export declare class FetchRequestor extends Requestor {
+    constructor(fetch: any);
     xhr<T>(settings: JQueryAjaxSettings): Promise<T>;
 }
 /**

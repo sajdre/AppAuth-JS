@@ -12,8 +12,6 @@
  * limitations under the License.
  */
 
-import fetch, {RequestInit, Response} from 'node-fetch'
-
 import {AppAuthError} from './errors';
 
 /**
@@ -21,6 +19,7 @@ import {AppAuthError} from './errors';
  */
 export abstract class Requestor {
   abstract xhr<T>(settings: JQueryAjaxSettings): Promise<T>;
+  fetch: any;
 }
 
 /**
@@ -48,6 +47,10 @@ export class JQueryRequestor extends Requestor {
  * Uses fetch API to make Ajax requests
  */
 export class FetchRequestor extends Requestor {
+  constructor(fetch: any) {
+    super();
+    this.fetch = fetch;
+  }
   xhr<T>(settings: JQueryAjaxSettings): Promise<T> {
     if (!settings.url) {
       return Promise.reject(new AppAuthError('A URL must be provided.'));
@@ -87,7 +90,7 @@ export class FetchRequestor extends Requestor {
       requestInit.headers['Accept'] = 'application/json, text/javascript, */*; q=0.01';
     }
 
-    return fetch(url.toString(), requestInit).then((response: any) => {
+    return this.fetch(url.toString(), requestInit).then((response: any) => {
       if (response.status >= 200 && response.status < 300) {
         const contentType = response.headers.get('content-type');
         if (isJsonDataType || (contentType && contentType.indexOf('application/json') !== -1)) {
