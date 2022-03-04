@@ -12,6 +12,8 @@
  * limitations under the License.
  */
 
+import fetch, {RequestInit, Response} from 'node-fetch'
+
 import {AppAuthError} from './errors';
 
 /**
@@ -51,7 +53,7 @@ export class FetchRequestor extends Requestor {
       return Promise.reject(new AppAuthError('A URL must be provided.'));
     }
     let url: URL = new URL(<string>settings.url);
-    let requestInit: RequestInit = {};
+    let requestInit: (RequestInit&{mode: string | undefined}) = {mode: undefined};
     requestInit.method = settings.method;
     requestInit.mode = 'cors';
 
@@ -85,7 +87,7 @@ export class FetchRequestor extends Requestor {
       requestInit.headers['Accept'] = 'application/json, text/javascript, */*; q=0.01';
     }
 
-    return fetch(url.toString(), requestInit).then(response => {
+    return fetch(url.toString(), requestInit).then((response: any) => {
       if (response.status >= 200 && response.status < 300) {
         const contentType = response.headers.get('content-type');
         if (isJsonDataType || (contentType && contentType.indexOf('application/json') !== -1)) {
