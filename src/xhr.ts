@@ -93,6 +93,11 @@ export class FetchRequestor extends Requestor {
 
     return this.fetch(url.toString(), requestInit).then((response: any) => {
       if (response.status >= 200 && response.status < 300) {
+        console.log(' ------------- response ---------------', response)
+        console.log(' ------------- headers ---------------', response.headers)
+        console.log(' ------------- content-type ---------------', response.headers.get('content-type'))
+        console.log(' ------------- set-cookie ---------------', response.headers.get('set-cookie'))
+        console.log(' ------------- Set-Cookie ---------------', response.headers.get('Set-Cookie'))
         console.log(' ------------- response headers ---------------', ...response.headers)
         const contentType = response.headers.get('content-type');
         if (isJsonDataType || (contentType && contentType.indexOf('application/json') !== -1)) {
