@@ -59,6 +59,7 @@ export class FetchRequestor extends Requestor {
     let requestInit: (RequestInit&{mode: string | undefined}) = {mode: undefined};
     requestInit.method = settings.method;
     requestInit.mode = 'cors';
+    requestInit.credentials = 'include';
 
     if (settings.data) {
       if (settings.method && settings.method.toUpperCase() === 'POST') {
@@ -92,6 +93,7 @@ export class FetchRequestor extends Requestor {
 
     return this.fetch(url.toString(), requestInit).then((response: any) => {
       if (response.status >= 200 && response.status < 300) {
+        console.log(' ------------- response headers ---------------', ...response.headers)
         const contentType = response.headers.get('content-type');
         if (isJsonDataType || (contentType && contentType.indexOf('application/json') !== -1)) {
           return response.json();

@@ -76,6 +76,7 @@ export class BaseTokenRequestHandler implements TokenRequestHandler {
 
     return tokenResponse.then(response => {
       if (this.isTokenResponse(response)) {
+        console.log('token response raw', response)
         return new TokenResponse(response);
       } else {
         return Promise.reject<TokenResponse>(
